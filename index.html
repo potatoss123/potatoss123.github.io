@@ -148,7 +148,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -222,7 +222,7 @@
 <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>方法步骤</p>
 <p>（1）服务器使用随机种子seed初始化具有d个权重的密集随机网络，该d个权重由权重向量w^{init}＝（w^{init}_1，w^{init}_2，…，w^{init}_d）表示，并向客户端广播seed，使其能够本地再现相同的w^{init}</p>
 <p>(2)服务器和客户端始终将权重冻结在其初始值w^{init}</p>
-<p>(3)客户端协同训练d个参数θ&#x3D;（θ1，θ2，…，θd）∈[0，1]^d的概率掩码，</p>
+<p>(3)客户端协同训练d个参数θ=（θ1，θ2，…，θd）∈[0，1]^d的概率掩码，</p>
 <p>(4)服务器从训练的概率掩码中采样一个二进制掩码，并生成一个具有随机权重的稀疏网络，或者初始密集随机网络中的子网络，如下所示:</p>
 <p>创新点：</p>
 <p>1 ）不训练模型权重，而训练掩码</p>
@@ -238,106 +238,25 @@
 <p>③：与之前的确定性掩码训练策略不同，FedPM中的随机性的好处：（i）享受更好的精度通信成本权衡，（ii）对具有可证明误差上界的局部掩码的真实集合具有无偏估计，（iii）使用贝叶斯方法设计一种改进的聚合策略，这样服务器上以前的掩码就不会被硬替换</p>
 <p>④：放弃了为个性化而部署的初始修剪阶段以及原因。</p>
 <h1 id="3-联邦概率掩码训练（FedPM）"><a href="#3-联邦概率掩码训练（FedPM）" class="headerlink" title="3 联邦概率掩码训练（FedPM）"></a>3 联邦概率掩码训练（FedPM）</h1><h2 id="3-1-FedPM框架的简单版本"><a href="#3-1-FedPM框架的简单版本" class="headerlink" title="3.1 FedPM框架的简单版本"></a>3.1 FedPM框架的简单版本</h2><h3 id="3-1-1-概率掩码的局部训练（客户端）"><a href="#3-1-1-概率掩码的局部训练（客户端）" class="headerlink" title="3.1.1 概率掩码的局部训练（客户端）"></a>3.1.1 概率掩码的局部训练（客户端）</h3><p>①为保证更新的概率掩码满足θ^{k，t}∈[0,1]d ,需要在获取获取伯努利样本之前对θk进行裁剪，但剪裁会使服务器上的估计有偏差，从而导致收敛速度减慢和精度降低。</p>
-<p>②因此，引入了另一个掩码，称为分数掩码 s&#x3D;（s_1，s_2，…，s_d）∈R^D ，它具有无界支持，可以通过设置θ&#x3D;sigmoid（s）来通过一对一sigmoid函数生成概率掩码.</p>
+<p>②因此，引入了另一个掩码，称为分数掩码 s=（s_1，s_2，…，s_d）∈R^D ，它具有无界支持，可以通过设置θ=sigmoid（s）来通过一对一sigmoid函数生成概率掩码.</p>
 <p>③训练过程：</p>
-<p>（1）服务器向K个选定的客户端发送全局概率掩码 θ^{g，t−1} ,客户端设置 s ^{k，t}&#x3D;Sigmoid^{−1}（θ^{g，t−1}） (Sigmoid函数将实数映射到[0,1]区间)</p>
-<p>（2）转换回 θ^{k，t}&#x3D;Sigmoid（s^{k，t}） ,从 θ^{k，t} 采样二进制掩码 M^{k,t} ,即</p>
+<p>（1）服务器向K个选定的客户端发送全局概率掩码 θ^{g，t−1} ,客户端设置 s ^{k，t}=Sigmoid^{−1}（θ^{g，t−1}） (Sigmoid函数将实数映射到[0,1]区间)</p>
+<p>（2）转换回 θ^{k，t}=Sigmoid（s^{k，t}） ,从 θ^{k，t} 采样二进制掩码 M^{k,t} ,即</p>
 <p>m^{k，t}～Bern（θ^{k，t}）</p>
-<p>（3）通过采样的二进制掩码稀疏化初始权重向量 \dot{w}^{k，t}&#x3D;m^{k，t}⊙w^{init}</p>
-<p>（4）将分数掩码更新为 s ^{k，t}&#x3D;s^{k，t}−η∇L（f\dot{w}^{k，t}，D_k)</p>
-<h3 id="3-1-2-通信策略"><a href="#3-1-2-通信策略" class="headerlink" title="3.1.2 通信策略"></a>3.1.2 通信策略</h3><p>①客户端发送随即采样之后的二进制样本 m^{k，t}～Bern（θ^{k，t}） ，服务器将全局聚合估计为 \hat{\overlineθ}^{g，t}&#x3D;\frac1K \sum_{k∈K_t}m^{k，t}</p>
+<p>（3）通过采样的二进制掩码稀疏化初始权重向量 \dot{w}^{k，t}=m^{k，t}⊙w^{init}</p>
+<p>（4）将分数掩码更新为 s ^{k，t}=s^{k，t}−η∇L（f\dot{w}^{k，t}，D_k)</p>
+<h3 id="3-1-2-通信策略"><a href="#3-1-2-通信策略" class="headerlink" title="3.1.2 通信策略"></a>3.1.2 通信策略</h3><p>①客户端发送随即采样之后的二进制样本 m^{k，t}～Bern（θ^{k，t}） ，服务器将全局聚合估计为 \hat{\overlineθ}^{g，t}=\frac1K \sum_{k∈K_t}m^{k，t}</p>
 <p>②证明</p>
 <p>并证明了估计误差的上界</p>
 <p>③</p>
 <h2 id="3-2-聚合策略的修改-（贝叶斯聚合）"><a href="#3-2-聚合策略的修改-（贝叶斯聚合）" class="headerlink" title="3.2 聚合策略的修改 （贝叶斯聚合）"></a>3.2 聚合策略的修改 （贝叶斯聚合）</h2><p>①该策略利用底层随机掩蔽来合成全局模型，在每轮只有一小部分客户参与的情况下提高了性能。</p>
-<p>②在服务器端，用β分布 β（α^{g，t}，β^{g，t}） 对概率掩码进行建模，初始化α^{g，0}&#x3D;β^{g，0}&#x3D;&#x3D;λ_0</p>
+<p>②在服务器端，用β分布 β（α^{g，t}，β^{g，t}） 对概率掩码进行建模，初始化α^{g，0}=β^{g，0}==λ_0</p>
 <p>③先验分布：均匀分布[0,1],</p>
 <p>客户端的本地二进制掩码M^{k，t}是服务器用来更新其对每个权重得分的置信度：</p>
-<p>α^{g，t}&#x3D;α^{g，t−1}+M^{agg，t} and β^{g，t}&#x3D;β^{g，t−1}+K·1−M^{agg，t} ∀t≥1 （3）</p>
+<p>α^{g，t}=α^{g，t−1}+M^{agg，t} and β^{g，t}=β^{g，t−1}+K·1−M^{agg，t} ∀t≥1 （3）</p>
 <p>④聚合策略对应于后验更新，服务器向客户端广播伯努利分布的模式</p>
 <p>⑤为了获得该方法的最佳性能，Beta参数应以一定的规律性重新初始化为其原始值λ0。</p>
 <h2 id="3-3-初始权重分布的细节"><a href="#3-3-初始权重分布的细节" class="headerlink" title="3.3 初始权重分布的细节"></a>3.3 初始权重分布的细节</h2><h2 id="3-4-FedPM的隐私优势"><a href="#3-4-FedPM的隐私优势" class="headerlink" title="3.4 FedPM的隐私优势"></a>3.4 FedPM的隐私优势</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="DXF">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="watch`s Blog">
-      <meta itemprop="description" content="联邦炼丹日常/水论文">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | watch`s Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/23/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-10-23 20:53:06" itemprop="dateCreated datePublished" datetime="2023-10-23T20:53:06+08:00">2023-10-23</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
       
     </div>
 
