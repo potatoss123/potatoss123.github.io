@@ -19,25 +19,35 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="联邦炼丹日常&#x2F;水论文">
-<meta property="og:type" content="website">
-<meta property="og:title" content="watch&#96;s Blog">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="摘要：现有方法问题：大多数现有方法都不允许不确定性量化，在跨孤岛和跨设备设置中的个性化仍然涉及重要问题。为此提出FedPop，其中客户的模型涉及固定的常见人口参数和随机效应，旨在解释数据异质性。为了得到我们方案的收敛保证，我们引入了一类新的联邦随机优化算法，该算法依赖于马尔可夫链蒙特卡罗方法。与现有的个性化FL方法相比，所提出的方法具有重要的优点：它对客户端漂移具有鲁棒性，对新客户端的推理具有实用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FedPop：一种用于个性化联合学习的贝叶斯方法">
+<meta property="og:url" content="http://example.com/2023/11/02/FedPop%EF%BC%9A%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="watch&#96;s Blog">
-<meta property="og:description" content="联邦炼丹日常&#x2F;水论文">
+<meta property="og:description" content="摘要：现有方法问题：大多数现有方法都不允许不确定性量化，在跨孤岛和跨设备设置中的个性化仍然涉及重要问题。为此提出FedPop，其中客户的模型涉及固定的常见人口参数和随机效应，旨在解释数据异质性。为了得到我们方案的收敛保证，我们引入了一类新的联邦随机优化算法，该算法依赖于马尔可夫链蒙特卡罗方法。与现有的个性化FL方法相比，所提出的方法具有重要的优点：它对客户端漂移具有鲁棒性，对新客户端的推理具有实用">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-16-25-19-image.png">
+<meta property="og:image" content="file:///D:/develop/Node.js/node_global/node_modules/hexo-cli/myBlog/source/imgs/2023-10-30-16-34-28-image.png">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-16-51-03-image.png">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-17-03-04-image.png">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-17-08-02-image.png">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-17-21-37-image.png">
+<meta property="og:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-31-16-09-46-image.png">
+<meta property="article:published_time" content="2023-11-02T13:47:41.000Z">
+<meta property="article:modified_time" content="2023-11-02T14:18:29.798Z">
 <meta property="article:author" content="DXF">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-30-16-25-19-image.png">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/11/02/FedPop%EF%BC%9A%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%96%B9%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/11/02/FedPop%EF%BC%9A%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%96%B9%E6%B3%95/","path":"2023/11/02/FedPop：一种用于个性化联合学习的贝叶斯方法/","title":"FedPop：一种用于个性化联合学习的贝叶斯方法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>watch`s Blog</title>
+<title>FedPop：一种用于个性化联合学习的贝叶斯方法 | watch`s Blog</title>
   
 
 
@@ -74,7 +84,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">watch`s Blog</h1>
+      <p class="site-title">watch`s Blog</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -127,7 +137,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">2 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%97%AE%E9%A2%98%E5%85%AC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 问题公式</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -174,16 +185,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/02/FedPop%EF%BC%9A%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -197,13 +209,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | watch`s Blog">
+      <meta itemprop="name" content="FedPop：一种用于个性化联合学习的贝叶斯方法 | watch`s Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/02/FedPop%EF%BC%9A%E4%B8%80%E7%A7%8D%E7%94%A8%E4%BA%8E%E4%B8%AA%E6%80%A7%E5%8C%96%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">FedPop：一种用于个性化联合学习的贝叶斯方法</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          FedPop：一种用于个性化联合学习的贝叶斯方法
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -235,8 +247,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <p>摘要：现有方法问题：大多数现有方法都不允许不确定性量化，在跨孤岛和跨设备设置中的个性化仍然涉及重要问题。为此提出FedPop，其中客户的模型涉及固定的常见人口参数和随机效应，旨在解释数据异质性。为了得到我们方案的收敛保证，我们引入了一类新的联邦随机优化算法，该算法依赖于马尔可夫链蒙特卡罗方法。与现有的个性化FL方法相比，所提出的方法具有重要的优点：它对客户端漂移具有鲁棒性，对新客户端的推理具有实用性，最重要的是，能够在温和的计算和内存开销下进行不确定性量化。我们为所提出的算法提供了非症状收敛保证，并说明了它们在各种个性化联合学习任务中的性能。</p>
+    <div class="post-body" itemprop="articleBody"><p>摘要：现有方法问题：大多数现有方法都不允许不确定性量化，在跨孤岛和跨设备设置中的个性化仍然涉及重要问题。为此提出FedPop，其中客户的模型涉及固定的常见人口参数和随机效应，旨在解释数据异质性。为了得到我们方案的收敛保证，我们引入了一类新的联邦随机优化算法，该算法依赖于马尔可夫链蒙特卡罗方法。与现有的个性化FL方法相比，所提出的方法具有重要的优点：它对客户端漂移具有鲁棒性，对新客户端的推理具有实用性，最重要的是，能够在温和的计算和内存开销下进行不确定性量化。我们为所提出的算法提供了非症状收敛保证，并说明了它们在各种个性化联合学习任务中的性能。</p>
 <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>创新点：采用混合效应建模，开发了FedPop的个性化Fl模型，提出了基于并行马尔可夫链蒙特卡罗（MCMC）方法的联邦随机逼近算法。</p>
 <p>好处：</p>
 <p>①第一种允许使用基于理论的方法进行廉价的不确定性量化</p>
@@ -261,7 +272,6 @@
 <p>不足：由于引入了公共先验，我们的模型不允许跨客户端训练异构架构，并且只满足一阶隐私保证</p>
 <p><img src="D:\develop\Node.js\node_global\node_modules\hexo-cli\myBlog\source\imgs\2023-10-31-16-09-46-image.png" alt=""></p>
 
-      
     </div>
 
     
@@ -269,127 +279,22 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/24/%E7%94%A8%E4%BA%8E%E9%80%9A%E4%BF%A1%E7%9A%84%E7%A8%80%E7%96%8F%E9%9A%8F%E6%9C%BA%E7%BD%91%E7%BB%9C%E9%AB%98%E6%95%88%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0/" rel="prev" title="‘用于通信的稀疏随机网络高效联合学习’">
+                  <i class="fa fa-angle-left"></i> ‘用于通信的稀疏随机网络高效联合学习’
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/24/%E7%94%A8%E4%BA%8E%E9%80%9A%E4%BF%A1%E7%9A%84%E7%A8%80%E7%96%8F%E9%9A%8F%E6%9C%BA%E7%BD%91%E7%BB%9C%E9%AB%98%E6%95%88%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="DXF">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="watch`s Blog">
-      <meta itemprop="description" content="联邦炼丹日常/水论文">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | watch`s Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/24/%E7%94%A8%E4%BA%8E%E9%80%9A%E4%BF%A1%E7%9A%84%E7%A8%80%E7%96%8F%E9%9A%8F%E6%9C%BA%E7%BD%91%E7%BB%9C%E9%AB%98%E6%95%88%E8%81%94%E5%90%88%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">‘用于通信的稀疏随机网络高效联合学习’</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2023-10-24 17:30:08 / 修改时间：20:25:44" itemprop="dateCreated datePublished" datetime="2023-10-24T17:30:08+08:00">2023-10-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/federated-learning/" itemprop="url" rel="index"><span itemprop="name">federated learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>摘要：联合学习中的一个主要挑战是在每一轮从客户端到服务器交换权重更新的巨大通信成本。虽然先前的工作在通过梯度压缩方法压缩权重更新方面取得了很大进展，但我们提出了一种完全不同的方法，该方法根本不更新权重。相反，我们的方法将权重冻结在其初始随机值，并学习如何稀疏随机网络以获得最佳性能。为此，客户端协作训练随机二进制掩码，以在原始掩码中找到最优稀疏随机网络。在训练结束时，最终的模型是具有随机权重的稀疏网络，或者是密集随机网络中的子网络。</p>
-<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>方法步骤</p>
-<p>（1）服务器使用随机种子seed初始化具有d个权重的密集随机网络，该d个权重由权重向量w^{init}＝（w^{init}_1，w^{init}_2，…，w^{init}_d）表示，并向客户端广播seed，使其能够本地再现相同的w^{init}</p>
-<p>(2)服务器和客户端始终将权重冻结在其初始值w^{init}</p>
-<p>(3)客户端协同训练d个参数θ=（θ1，θ2，…，θd）∈[0，1]^d的概率掩码，</p>
-<p>(4)服务器从训练的概率掩码中采样一个二进制掩码，并生成一个具有随机权重的稀疏网络，或者初始密集随机网络中的子网络，如下所示:</p>
-<p>创新点：</p>
-<p>1 ）不训练模型权重，而训练掩码</p>
-<p>2）服务器端采用贝叶斯聚合</p>
-<h1 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2 相关工作"></a>2 相关工作</h1><p><u>高效沟通FL</u>：</p>
-<p>提高FL中通信效率的方法：是使用梯度压缩方法压缩模型更新，如稀疏化、量化；或更多面向FL的压缩方案</p>
-<p><u>FL修剪</u>：</p>
-<p>①：彩票假说：在随机初始化的密集网络中存在稀疏网络（彩票），因此这些稀疏网络可以被训练到令人惊讶的良好性能。（和原始网络相近）</p>
-<p>②：介绍寻找以前彩票的方法的代价大以及原因（i）这些方法需要训练权重值，因此不能像FedPM那样提供最终模型的有效表示 （ii）需要在FL训练前找到彩票，增加了计算成本 （iii）与基于LTH或修剪的FL工作相反，我们的框架学习特定权重在最终模型中停留的概率</p>
-<p><u>在随机网络中寻找子网络</u></p>
-<p>①：介绍了前人的研究成果：在具有随机权重的密集网络中发现了子网络（或超级任务），这些子网络在没有训练权重的情况下表现得出奇地好.</p>
-<p>②：利用此类子网络的存在，将FL中的通信预算减少到小于1 bpp</p>
-<p>③：与之前的确定性掩码训练策略不同，FedPM中的随机性的好处：（i）享受更好的精度通信成本权衡，（ii）对具有可证明误差上界的局部掩码的真实集合具有无偏估计，（iii）使用贝叶斯方法设计一种改进的聚合策略，这样服务器上以前的掩码就不会被硬替换</p>
-<p>④：放弃了为个性化而部署的初始修剪阶段以及原因。</p>
-<h1 id="3-联邦概率掩码训练（FedPM）"><a href="#3-联邦概率掩码训练（FedPM）" class="headerlink" title="3 联邦概率掩码训练（FedPM）"></a>3 联邦概率掩码训练（FedPM）</h1><h2 id="3-1-FedPM框架的简单版本"><a href="#3-1-FedPM框架的简单版本" class="headerlink" title="3.1 FedPM框架的简单版本"></a>3.1 FedPM框架的简单版本</h2><h3 id="3-1-1-概率掩码的局部训练（客户端）"><a href="#3-1-1-概率掩码的局部训练（客户端）" class="headerlink" title="3.1.1 概率掩码的局部训练（客户端）"></a>3.1.1 概率掩码的局部训练（客户端）</h3><p>①为保证更新的概率掩码满足θ^{k，t}∈[0,1]d ,需要在获取获取伯努利样本之前对θk进行裁剪，但剪裁会使服务器上的估计有偏差，从而导致收敛速度减慢和精度降低。</p>
-<p>②因此，引入了另一个掩码，称为分数掩码 s=（s_1，s_2，…，s_d）∈R^D ，它具有无界支持，可以通过设置θ=sigmoid（s）来通过一对一sigmoid函数生成概率掩码.</p>
-<p>③训练过程：</p>
-<p>（1）服务器向K个选定的客户端发送全局概率掩码 θ^{g，t−1} ,客户端设置 s ^{k，t}=Sigmoid^{−1}（θ^{g，t−1}） (Sigmoid函数将实数映射到[0,1]区间)</p>
-<p>（2）转换回 θ^{k，t}=Sigmoid（s^{k，t}） ,从 θ^{k，t} 采样二进制掩码 M^{k,t} ,即</p>
-<p>m^{k，t}～Bern（θ^{k，t}）</p>
-<p>（3）通过采样的二进制掩码稀疏化初始权重向量 \dot{w}^{k，t}=m^{k，t}⊙w^{init}</p>
-<p>（4）将分数掩码更新为 s ^{k，t}=s^{k，t}−η∇L（f\dot{w}^{k，t}，D_k)</p>
-<h3 id="3-1-2-通信策略"><a href="#3-1-2-通信策略" class="headerlink" title="3.1.2 通信策略"></a>3.1.2 通信策略</h3><p>①客户端发送随即采样之后的二进制样本 m^{k，t}～Bern（θ^{k，t}） ，服务器将全局聚合估计为 \hat{\overlineθ}^{g，t}=\frac1K \sum_{k∈K_t}m^{k，t}</p>
-<p>②证明</p>
-<p>并证明了估计误差的上界</p>
-<p>③</p>
-<h2 id="3-2-聚合策略的修改-（贝叶斯聚合）"><a href="#3-2-聚合策略的修改-（贝叶斯聚合）" class="headerlink" title="3.2 聚合策略的修改 （贝叶斯聚合）"></a>3.2 聚合策略的修改 （贝叶斯聚合）</h2><p>①该策略利用底层随机掩蔽来合成全局模型，在每轮只有一小部分客户参与的情况下提高了性能。</p>
-<p>②在服务器端，用β分布 β（α^{g，t}，β^{g，t}） 对概率掩码进行建模，初始化α^{g，0}=β^{g，0}==λ_0</p>
-<p>③先验分布：均匀分布[0,1],</p>
-<p>客户端的本地二进制掩码M^{k，t}是服务器用来更新其对每个权重得分的置信度：</p>
-<p>α^{g，t}=α^{g，t−1}+M^{agg，t} and β^{g，t}=β^{g，t−1}+K·1−M^{agg，t} ∀t≥1 （3）</p>
-<p>④聚合策略对应于后验更新，服务器向客户端广播伯努利分布的模式</p>
-<p>⑤为了获得该方法的最佳性能，Beta参数应以一定的规律性重新初始化为其原始值λ0。</p>
-<h2 id="3-3-初始权重分布的细节"><a href="#3-3-初始权重分布的细节" class="headerlink" title="3.3 初始权重分布的细节"></a>3.3 初始权重分布的细节</h2><h2 id="3-4-FedPM的隐私优势"><a href="#3-4-FedPM的隐私优势" class="headerlink" title="3.4 FedPM的隐私优势"></a>3.4 FedPM的隐私优势</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
